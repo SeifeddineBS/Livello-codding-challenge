@@ -1,23 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import Movies from "./components/Movies";
+import SearchInput from "./components/SearchInput";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
 
 function App() {
+  const [movies, setMovies] = useState([]);
+  const [input, setInput] = useState("");
+  const getMovieApi = async (input) => {
+    const url = `http://www.omdbapi.com/?s=${input}&apikey=${process.env.REACT_APP_API_KEY}`;
+
+    const data = await fetch(url);
+    const dataJson = await data.json();
+    console.log("url: " + url);
+
+    console.log(dataJson.Search);
+    if (dataJson.Search) setMovies(dataJson.Search);
+  };
+  useEffect(() => {
+    getMovieApi(input);
+  }, [input]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container-fluid movie-app">
+      <div className="row">
+        <SearchInput input={input} setInput={setInput} />
+      </div>
+      <div className="row">
+        <Movies movies={movies} />
+      </div>
     </div>
   );
 }
