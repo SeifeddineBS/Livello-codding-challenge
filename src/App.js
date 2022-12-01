@@ -4,31 +4,48 @@ import SearchInput from "./components/SearchInput";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
-function App() {
+import { Route, Routes } from "react-router-dom";
+import Movie from "./components/Movie";
+
+function App(props) {
   const [movies, setMovies] = useState([]);
+  const [movie, setMovie] = useState();
+
   const [input, setInput] = useState("");
+
   const getMovieApi = async (input) => {
     const url = `http://www.omdbapi.com/?s=${input}&apikey=${process.env.REACT_APP_API_KEY}`;
 
     const data = await fetch(url);
     const dataJson = await data.json();
-    console.log("url: " + url);
 
-    console.log(dataJson.Search);
-    if (dataJson.Search) setMovies(dataJson.Search);
+    if (dataJson.Search) {
+      setMovies(dataJson.Search);
+
+      //setClicked(false);
+    }
   };
+
   useEffect(() => {
     getMovieApi(input);
-  }, [input]);
+  }, [input, movie]);
 
   return (
-    <div className="container-fluid movie-app">
-      <div className="row">
-        <SearchInput input={input} setInput={setInput} />
+    <div>
+      <div className="container-fluid movie-app">
+        <div className="row">
+          <SearchInput input={input} setInput={setInput} />
+        </div>
       </div>
-      <div className="row">
-        <Movies movies={movies} />
-      </div>
+      {movie ? (
+        <>{movie && <Movie movie={movie} setMovie={setMovie} />}</>
+      ) : (
+        <div className="container-fluid movie-app">
+          <div className="row">
+            <Movies movies={movies} setMovie={setMovie} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
