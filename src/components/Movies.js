@@ -1,15 +1,22 @@
 import React, { useState, useEffect } from "react";
 
-import { Link, useNavigate } from "react-router-dom";
-import Movie from "./Movie";
-
 const Movies = (props) => {
-  const navigate = useNavigate();
-
   const details = async (movie) => {
-    //navigate("/movie/" + imdbID);
     props.setMovie(movie);
-   
+    var existingMovies = JSON.parse(localStorage.getItem("movies") || "[]");
+
+    existingMovies.forEach((element, index) => {
+      if (element.imdbID === movie.imdbID) {
+        existingMovies.splice(index, 1);
+        localStorage.setItem("movies", JSON.stringify(existingMovies));
+        var maxSize = 4;
+      } else if (existingMovies.length == maxSize) {
+        existingMovies.splice(0, 1);
+      }
+    });
+
+    existingMovies.push(movie);
+    localStorage.setItem("movies", JSON.stringify(existingMovies));
   };
 
   return (

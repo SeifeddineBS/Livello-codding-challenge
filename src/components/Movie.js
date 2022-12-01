@@ -1,6 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 const Movie = (props) => {
+  const [recentMovies, setRecentMovies] = useState(
+    JSON.parse(localStorage.getItem("movies"))
+  );
+  const goToMovie = (movie) => {
+    console.log("movie");
+    props.setMovie(movie);
+  };
+  useEffect(() => {}, [props]);
+
   return (
     <>
       <div className="container">
@@ -19,50 +28,26 @@ const Movie = (props) => {
             <b>{props?.movie.Year}</b>
           </div>
         </div>
+        {recentMovies ? (
+          <>
+            <h3 className="my-4">Recents</h3>
 
-        <h3 className="my-4">Recents</h3>
-
-        <div className="row">
-          <div className="col-md-3 col-sm-6 mb-4">
-            <a href="#">
-              <img
-                className="img-fluid"
-                src="https://via.placeholder.com/500x300"
-                alt=""
-              ></img>
-            </a>
-          </div>
-
-          <div className="col-md-3 col-sm-6 mb-4">
-            <a href="#">
-              <img
-                className="img-fluid"
-                src="https://via.placeholder.com/500x300"
-                alt=""
-              ></img>
-            </a>
-          </div>
-
-          <div className="col-md-3 col-sm-6 mb-4">
-            <a href="#">
-              <img
-                className="img-fluid"
-                src="https://via.placeholder.com/500x300"
-                alt=""
-              ></img>
-            </a>
-          </div>
-
-          <div className="col-md-3 col-sm-6 mb-4">
-            <a href="#">
-              <img
-                className="img-fluid"
-                src="https://via.placeholder.com/500x300"
-                alt=""
-              ></img>
-            </a>
-          </div>
-        </div>
+            <div className="row">
+              {recentMovies.reverse().map((movie, index) => (
+                <div className="col-md-3 col-sm-6 mb-4">
+                    <img
+                      className="img-fluid"
+                      src={movie.Poster}
+                      alt=""
+                      onClick={() => goToMovie(movie)}
+                    ></img>
+                </div>
+              ))}
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
       </div>
     </>
   );
