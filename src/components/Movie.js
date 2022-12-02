@@ -5,7 +5,6 @@ const Movie = (props) => {
     JSON.parse(localStorage.getItem("movies"))
   );
   const goToMovie = (movie) => {
-    console.log("movie");
     props.setMovie(movie);
   };
   useEffect(() => {}, [props]);
@@ -21,11 +20,9 @@ const Movie = (props) => {
           </div>
 
           <div className="col-md-4">
-            <h3 className="my-3">Type</h3>
-            <b>{props?.movie.Type}</b>
+            <h1 className="my-3">Type : {props?.movie.Type}</h1>
 
-            <h3 className="my-3">Year</h3>
-            <b>{props?.movie.Year}</b>
+            <h1 className="my-3">Year : {props?.movie.Year}</h1>
           </div>
         </div>
         {recentMovies ? (
@@ -35,12 +32,15 @@ const Movie = (props) => {
             <div className="row">
               {recentMovies.reverse().map((movie, index) => (
                 <div className="col-md-3 col-sm-6 mb-4">
-                    <img
-                      className="img-fluid"
-                      src={movie.Poster}
-                      alt=""
-                      onClick={() => goToMovie(movie)}
-                    ></img>
+                  <img
+                    className="img-fluid"
+                    src={movie.Poster}
+                    alt=""
+                    onClick={() => goToMovie(movie)}
+                  ></img>
+                  <h4>
+                    {movie.Title} - {movie.Year}
+                  </h4>
                 </div>
               ))}
             </div>

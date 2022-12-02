@@ -3,9 +3,15 @@ import React, { useState, useEffect } from "react";
 const Movies = (props) => {
   const details = async (movie) => {
     props.setMovie(movie);
+    props.setInputChanged(false);
+
     var existingMovies = JSON.parse(localStorage.getItem("movies") || "[]");
 
     existingMovies.forEach((element, index) => {
+      if (existingMovies.length == maxSize) {
+        existingMovies.splice(0, 1);
+      }
+
       if (element.imdbID === movie.imdbID) {
         existingMovies.splice(index, 1);
         localStorage.setItem("movies", JSON.stringify(existingMovies));
@@ -25,7 +31,7 @@ const Movies = (props) => {
         <div className="d-flex justify-content-start m-3">
           <img
             src={movie.Poster}
-            alt="movie"
+            alt={movie.Title}
             onClick={() => details(movie)}
           ></img>
         </div>

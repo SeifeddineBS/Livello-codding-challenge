@@ -7,7 +7,7 @@ const SearchInput = (props) => {
         className="form-control"
         placeholder="Search"
         value={props.value}
-        onChange={(event) => props.setInput(event.target.value)}
+        onChange={(event) => {props.setInput(event.target.value);props.setInputChanged(true)}}
       ></input>
     </div>
   );
