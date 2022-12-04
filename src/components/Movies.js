@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useDispatch } from "react-redux";
+import { favActions } from "./store/fav-slice";
 
 const Movies = (props) => {
   const details = async (movie) => {
@@ -8,15 +10,11 @@ const Movies = (props) => {
     var existingMovies = JSON.parse(localStorage.getItem("movies") || "[]");
 
     existingMovies.forEach((element, index) => {
-      if (existingMovies.length == maxSize) {
-        existingMovies.splice(0, 1);
-      }
-
       if (element.imdbID === movie.imdbID) {
         existingMovies.splice(index, 1);
         localStorage.setItem("movies", JSON.stringify(existingMovies));
         var maxSize = 4;
-      } else if (existingMovies.length == maxSize) {
+      } else if (existingMovies.length === maxSize) {
         existingMovies.splice(0, 1);
       }
     });
@@ -25,17 +23,33 @@ const Movies = (props) => {
     localStorage.setItem("movies", JSON.stringify(existingMovies));
   };
 
+  const dispatch = useDispatch();
+  const addToFavs = (movie) => {
+    dispatch(favActions.addToFavs(movie));
+  };
+
   return (
     <>
-      {props.movies.map((movie, index) => (
-        <div className="d-flex justify-content-start m-3">
-          <img
-            src={movie.Poster}
-            alt={movie.Title}
-            onClick={() => details(movie)}
-          ></img>
-        </div>
-      ))}
+      <div className="row">
+        {props.movies.map((movie, index) => (
+          <div key={movie.imdbID} className="col-md-3 col-sm-6 mb-4">
+            <img
+              src={movie.Poster}
+              alt={movie.Title}
+              onClick={() => details(movie)}
+            ></img>
+            <h4>
+              {movie.Title} - {movie.Year}
+              <button
+                className="btn btn-primary"
+                onClick={() => addToFavs(movie)}
+              >
+                Add
+              </button>
+            </h4>
+          </div>
+        ))}
+      </div>
     </>
   );
 };

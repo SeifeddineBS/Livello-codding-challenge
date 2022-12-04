@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 
 const Movie = (props) => {
-  const [recentMovies, setRecentMovies] = useState(
-    JSON.parse(localStorage.getItem("movies"))
-  );
+  const recentMovies = JSON.parse(localStorage.getItem("movies"));
   const goToMovie = (movie) => {
     props.setMovie(movie);
   };
+
   useEffect(() => {}, [props]);
 
   return (
@@ -31,7 +30,7 @@ const Movie = (props) => {
 
             <div className="row">
               {recentMovies.reverse().map((movie, index) => (
-                <div className="col-md-3 col-sm-6 mb-4">
+                <div key={movie.imdbID} className="col-md-3 col-sm-6 mb-4">
                   <img
                     className="img-fluid"
                     src={movie.Poster}
