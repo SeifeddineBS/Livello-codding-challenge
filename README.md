@@ -1,6 +1,14 @@
 #  a small React App that lists searched results from OMDb API.
 
-Getting the API key from http://www.omdbapi.com/
+## Getting the API key from http://www.omdbapi.com/
+
+### I used redux to store a movie clicked, list of favorites choosen by the user and  list of movies resulted from the search from the Omdb API .
+#### The user can see the a details of a movie and add it to his favorites.
+#### The he can have access to that to see his favorite movies and delete the movie he wants.
+#### The user can also see his last movies visited.
+##### The screen is dynamically updated  when the input search is changed
+##### Some informations are refreshed dynamically according to the displayed screen.
+
 ## Available Scripts
 
 In the project directory, you can run:
