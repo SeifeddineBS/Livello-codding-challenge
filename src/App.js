@@ -3,9 +3,12 @@ import Movies from "./components/Movies";
 import Header from "./components/Header";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { moviesActions } from "./components/store/movies-slice";
 
 function App(props) {
+  const dispatch = useDispatch();
+
   const [movies, setMovies] = useState([]);
 
   const [input, setInput] = useState("");
@@ -13,21 +16,22 @@ function App(props) {
   const [inputChanged, setInputChanged] = useState(false);
   const showFavs = useSelector((state) => state.fav.showFavs);
   const favs = useSelector((state) => state.fav.itemsList);
-
-  const getMovieApi = async (input) => {
-    const url = `http://www.omdbapi.com/?s=${input}&apikey=${process.env.REACT_APP_API_KEY}`;
-
-    const data = await fetch(url);
-    const dataJson = await data.json();
-
-    if (dataJson.Search) {
-      setMovies(dataJson.Search);
-    }
-  };
+  const stateMovies = useSelector((state) => state.movies.movies);
 
   useEffect(() => {
-    getMovieApi(input);
-  }, [input]);
+    const GetMovieApi = async (input) => {
+      const url = `http://www.omdbapi.com/?s=${input}&apikey=${process.env.REACT_APP_API_KEY}`;
+
+      const data = await fetch(url);
+      const dataJson = await data.json();
+      dispatch(moviesActions.allMovies(dataJson));
+
+      if (dataJson.Search) {
+        setMovies(stateMovies);
+      }
+    };
+    GetMovieApi(input);
+  }, [dispatch, stateMovies, input]);
 
   return (
     <div>

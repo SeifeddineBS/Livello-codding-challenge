@@ -6,11 +6,13 @@ import { favActions } from "./store/fav-slice";
 
 const Movies = (props) => {
   const dispatch = useDispatch();
+  const movies = useSelector((state) => state.movies.movies);
+  const favs = useSelector((state) => state.fav.itemsList);
+  const showFavs = useSelector((state) => state.fav.showFavs);
 
   const Details = async (movie) => {
     dispatch(detailsActions.setShowDetails(true));
     dispatch(detailsActions.showDetails(movie));
-    props.setInputChanged(false);
 
     var existingMovies = JSON.parse(localStorage.getItem("movies") || "[]");
 
@@ -28,7 +30,6 @@ const Movies = (props) => {
     localStorage.setItem("movies", JSON.stringify(existingMovies));
   };
   const showDetails = useSelector((state) => state.details.showDetails);
-  const showFavs = useSelector((state) => state.fav.showFavs);
 
   const addToFavs = (movie) => {
     dispatch(favActions.addToFavs(movie));
@@ -36,8 +37,6 @@ const Movies = (props) => {
   const removeFromFavs = (movie) => {
     dispatch(favActions.removeFromFavs(movie));
   };
-
-  const favs = useSelector((state) => state.fav.itemsList);
 
   function MovieExistFav(movie) {
     let exist = false;
@@ -49,42 +48,78 @@ const Movies = (props) => {
 
     return exist;
   }
+
   return (
     <>
       {showDetails ? (
         <Movie />
       ) : (
         <div className="row">
-          {showFavs && <h1>Favorites :</h1>}
           {showFavs && favs.length === 0 && <h1>Not found </h1>}
-
-          {props.movies.map((movie, index) => (
-            <div key={movie.imdbID} className="col-md-3 col-sm-6 mb-4">
-              <img
-                src={movie.Poster}
-                alt={movie.Title}
-                onClick={() => Details(movie)}
-              ></img>
-              <h4>
-                {movie.Title} - {movie.Year}
-                {MovieExistFav(movie) ? (
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => removeFromFavs(movie)}
-                  >
-                    Remove
-                  </button>
-                ) : (
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => addToFavs(movie)}
-                  >
-                    Add
-                  </button>
-                )}
-              </h4>
-            </div>
-          ))}
+          {showFavs ? (
+            <>
+              <h1>Favorites :</h1>
+              {favs.map((movie, index) => (
+                <div key={movie.imdbID} className="col-md-3 col-sm-6 mb-4">
+                  <img
+                    src={movie.Poster}
+                    alt={movie.Title}
+                    onClick={() => Details(movie)}
+                  ></img>
+                  <h4>
+                    {movie.Title} - {movie.Year}
+                    {MovieExistFav(movie) ? (
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => removeFromFavs(movie)}
+                      >
+                        Remove
+                      </button>
+                    ) : (
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => addToFavs(movie)}
+                      >
+                        Add
+                      </button>
+                    )}
+                  </h4>
+                </div>
+              ))}
+            </>
+          ) : (
+            movies && (
+              <>
+                {movies.map((movie, index) => (
+                  <div key={movie.imdbID} className="col-md-3 col-sm-6 mb-4">
+                    <img
+                      src={movie.Poster}
+                      alt={movie.Title}
+                      onClick={() => Details(movie)}
+                    ></img>
+                    <h4>
+                      {movie.Title} - {movie.Year}
+                      {MovieExistFav(movie) ? (
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => removeFromFavs(movie)}
+                        >
+                          Remove
+                        </button>
+                      ) : (
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => addToFavs(movie)}
+                        >
+                          Add
+                        </button>
+                      )}
+                    </h4>
+                  </div>
+                ))}
+              </>
+            )
+          )}
         </div>
       )}
     </>
