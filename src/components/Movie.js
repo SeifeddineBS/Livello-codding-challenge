@@ -4,36 +4,39 @@ import { detailsActions } from "./store/details-slice";
 import { favActions } from "./store/fav-slice";
 
 const Movie = (props) => {
-  const recentMovies = JSON.parse(localStorage.getItem("movies"));
-
   const dispatch = useDispatch();
+  const [existFavs, setExistFavs] = useState(); // variable to know if this movie exist in the favorites list or not .
+
+  const favs = useSelector((state) => state.fav.itemsList); // get all favorites from store
+  const movie = useSelector((state) => state.details.movie); // get movie clicked from the store
+
+  const recentMovies = JSON.parse(localStorage.getItem("movies")); // get recent movies from local storage
 
   const Details = async (movie) => {
-    dispatch(detailsActions.setShowDetails(true));
-    dispatch(detailsActions.showDetails(movie));
+    // when clicked to details go to movie details
+    dispatch(detailsActions.setShowDetails(true)); // let the variable to true to know that a movie is clicked and show it
+    dispatch(detailsActions.showDetails(movie)); // update the movie clicked
   };
 
-  const movie = useSelector((state) => state.details.movie);
-
   const addToFavs = (movie) => {
+    // add a movie to favorite
     dispatch(favActions.addToFavs(movie));
     setExistFavs(true);
   };
   const removeFromFavs = (movie) => {
+    // remove a movie from favorite
     dispatch(favActions.removeFromFavs(movie));
     setExistFavs(false);
   };
-  const favs = useSelector((state) => state.fav.itemsList);
-
-  const [existFavs, setExistFavs] = useState();
 
   useEffect(() => {
+    // use Effect to veify every movie clicked if it is in favorite list .
     let exist = false;
     favs.forEach((element) => {
       if (element.imdbID === movie.imdbID) exist = true;
     });
     setExistFavs(exist);
-  }, [movie, favs]);
+  }, [movie, favs]); // every time when a movie or favs changed this function exectued again .
 
   return (
     <>
@@ -50,7 +53,7 @@ const Movie = (props) => {
 
             <h1 className="my-3">Year : {movie.Year}</h1>
           </div>
-          {!existFavs ? (
+          {!existFavs ? ( // if movie dont exist in the favs
             <button
               className="btn btn-primary"
               onClick={() => addToFavs(movie)}
@@ -58,6 +61,7 @@ const Movie = (props) => {
               Add
             </button>
           ) : (
+            // if movie  exist in the favs
             <button
               className="btn btn-primary"
               onClick={() => removeFromFavs(movie)}
@@ -66,7 +70,7 @@ const Movie = (props) => {
             </button>
           )}
         </div>
-        {recentMovies ? (
+        {recentMovies ? ( // if recent movies exist show them from storage
           <>
             <h3 className="my-4">Recents</h3>
 

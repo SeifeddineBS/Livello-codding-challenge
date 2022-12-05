@@ -6,39 +6,54 @@ import { favActions } from "./store/fav-slice";
 
 const Movies = (props) => {
   const dispatch = useDispatch();
-  const movies = useSelector((state) => state.movies.movies);
-  const favs = useSelector((state) => state.fav.itemsList);
-  const showFavs = useSelector((state) => state.fav.showFavs);
+  const movies = useSelector((state) => state.movies.movies); // get all movies stored  after research
+  const favs = useSelector((state) => state.fav.itemsList); // get all favs from redux store
+  const showFavs = useSelector((state) => state.fav.showFavs); // verify if favorites button is clicked or not to show favs
+  const showDetails = useSelector((state) => state.details.showDetails); // get if a movie is clicked or not to show it
+  const existingMovies = JSON.parse(localStorage.getItem("movies") || "[]"); // movies from local storage
 
-  const Details = async (movie) => {
-    dispatch(detailsActions.setShowDetails(true));
-    dispatch(detailsActions.showDetails(movie));
-
-    var existingMovies = JSON.parse(localStorage.getItem("movies") || "[]");
-
+  function addMovieToRecentMovies(movie) {
+    // add a movie after clicked to recent movies in the storage
     existingMovies.forEach((element, index) => {
+      var maxSize = 4; // set the max size of movies to be shown
+
+      // verify if the movie exist
+
       if (element.imdbID === movie.imdbID) {
+        // if the movie exist delete it and push it again to be the first one in the array
         existingMovies.splice(index, 1);
-        localStorage.setItem("movies", JSON.stringify(existingMovies));
-        var maxSize = 4;
-      } else if (existingMovies.length === maxSize) {
-        existingMovies.splice(0, 1);
+      } 
+       if (existingMovies.length === maxSize) {
+        existingMovies.splice(0, 1); // delete the last movie if max size attended 
       }
     });
 
-    existingMovies.push(movie);
-    localStorage.setItem("movies", JSON.stringify(existingMovies));
+    existingMovies.push(movie); // push movie to list
+    localStorage.setItem("movies", JSON.stringify(existingMovies)); // set the new array to storage
+  }
+
+  const Details = async (movie) => {
+    // when clicked to details go to movie details
+
+    dispatch(detailsActions.setShowDetails(true)); // let the variable to true to know that a movie is clicked and show it
+    dispatch(detailsActions.showDetails(movie)); // update the movie clicked
+    addMovieToRecentMovies(movie);
   };
-  const showDetails = useSelector((state) => state.details.showDetails);
 
   const addToFavs = (movie) => {
+    // add a movie to favorite
+
     dispatch(favActions.addToFavs(movie));
   };
   const removeFromFavs = (movie) => {
+    // remove a movie from favorite
+
     dispatch(favActions.removeFromFavs(movie));
   };
 
   function MovieExistFav(movie) {
+    // verify  if the movie is in the favorite list or not
+
     let exist = false;
     favs.forEach((element) => {
       if (element.imdbID === movie.imdbID) {
@@ -52,11 +67,11 @@ const Movies = (props) => {
   return (
     <>
       {showDetails ? (
-        <Movie />
+        <Movie /> // if movie details clicekd
       ) : (
         <div className="row">
           {showFavs && favs.length === 0 && <h1>Not found </h1>}
-          {showFavs ? (
+          {showFavs ? ( // if favorites button is clicked
             <>
               <h1>Favorites :</h1>
               {favs.map((movie, index) => (
