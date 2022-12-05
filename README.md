@@ -2,7 +2,7 @@
 
 ## Getting the API key from http://www.omdbapi.com/
 
-### I used redux to store a movie clicked, list of favorites choosen by the user and  list of movies resulted from the search from the Omdb API .
+### Using redux to store a movie clicked, list of favorites choosen by the user and  list of movies resulted from the search from the Omdb API .
 #### The user can see the a details of a movie and add it to his favorites.
 #### The he can have access to that to see his favorite movies and delete the movie he wants.
 #### The user can also see his last movies visited.
