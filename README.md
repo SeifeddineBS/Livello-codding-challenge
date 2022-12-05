@@ -1,7 +1,6 @@
-# Getting Started with Create React App
+#  a small React App that lists searched results from OMDb API.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
+Getting the API key from http://www.omdbapi.com/
 ## Available Scripts
 
 In the project directory, you can run:

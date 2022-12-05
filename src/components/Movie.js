@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { detailsActions } from "./store/details-slice";
 import { favActions } from "./store/fav-slice";
+import { Button } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
 
 const Movie = (props) => {
   const dispatch = useDispatch();
@@ -37,7 +40,7 @@ const Movie = (props) => {
     });
     setExistFavs(exist);
   }, [movie, favs]); // every time when a movie or favs changed this function exectued again .
-
+  
   return (
     <>
       <div className="container">
@@ -54,20 +57,23 @@ const Movie = (props) => {
             <h1 className="my-3">Year : {movie.Year}</h1>
           </div>
           {!existFavs ? ( // if movie dont exist in the favs
-            <button
-              className="btn btn-primary"
+            <Button
+              variant="outlined"
+              endIcon={<AddIcon />}
               onClick={() => addToFavs(movie)}
             >
-              Add
-            </button>
+              Add To Favorites
+            </Button>
           ) : (
             // if movie  exist in the favs
-            <button
-              className="btn btn-primary"
+
+            <Button
+              variant="outlined"
+              startIcon={<DeleteIcon />}
               onClick={() => removeFromFavs(movie)}
             >
-              Remove from favorites
-            </button>
+              Remove From Favorites
+            </Button>
           )}
         </div>
         {recentMovies ? ( // if recent movies exist show them from storage
