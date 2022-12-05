@@ -15,9 +15,10 @@ const favSlice = createSlice({
       if (!isItemExist) {
         state.itemsList.push({
           imdbID: newItem.imdbID,
-          title: newItem.Title,
-          year: newItem.Year,
-          poster: newItem.Poster,
+          Title: newItem.Title,
+          Year: newItem.Year,
+          Poster: newItem.Poster,
+          Favs: true,
         });
         state.totalQuantity++;
       } else {

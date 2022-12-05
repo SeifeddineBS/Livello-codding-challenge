@@ -1,18 +1,20 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import "./SearchInput.css";
-import FavoriteList from "./FavoriteList";
+import "./Header.css";
 import { favActions } from "./store/fav-slice";
+import { detailsActions } from "./store/details-slice";
 
 const Header = (props) => {
   const quantity = useSelector((state) => state.fav.totalQuantity);
-  const showFavsList = useSelector((state) => state.fav.showFavs);
 
-  useEffect(() => {}, [showFavsList]);
   const dispatch = useDispatch();
 
   const SetShowFav = (action) => {
     dispatch(favActions.setShowFavs(action));
+  };
+
+  const setShowDetails = (action) => {
+    dispatch(detailsActions.setShowDetails(action));
   };
 
   return (
@@ -33,6 +35,7 @@ const Header = (props) => {
                     props.setInput(event.target.value);
                     props.setInputChanged(true);
                     SetShowFav(false);
+                    setShowDetails(false);
                   }}
                 ></input>
               </div>
@@ -40,15 +43,15 @@ const Header = (props) => {
             <button
               type="button"
               className="btn btn-link"
-              onClick={() => SetShowFav(true)}
+              onClick={() => {
+                SetShowFav(true);
+              }}
             >
               <h2>{quantity} movies</h2>
             </button>
           </ul>
         </nav>
       </header>
-
-      {showFavsList && <FavoriteList />}
     </div>
   );
 };
