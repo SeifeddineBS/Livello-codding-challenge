@@ -4,8 +4,6 @@ import "./Header.css";
 import { favActions } from "./store/fav-slice";
 import { detailsActions } from "./store/details-slice";
 import Typography from "@mui/material/Typography";
-import SendIcon from "@mui/icons-material/Send";
-import { Button } from "@mui/material";
 import Fab from "@mui/material/Fab";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 

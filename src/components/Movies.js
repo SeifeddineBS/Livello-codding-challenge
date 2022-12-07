@@ -6,8 +6,6 @@ import { favActions } from "./store/fav-slice";
 import { Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
-import Fab from "@mui/material/Fab";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 
 
 const Movies = (props) => {
